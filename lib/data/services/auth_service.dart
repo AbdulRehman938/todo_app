@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class AuthService extends GetxService {
@@ -15,6 +16,13 @@ class AuthService extends GetxService {
 
   // Check if user is logged in
   bool get isLoggedIn => _auth.currentUser != null;
+
+  @override
+  void onInit() {
+    super.onInit();
+    debugPrint('AuthService: Initialized');
+    debugPrint('AuthService: Current user: ${currentUser?.email}');
+  }
 
   // Register with email and password
   Future<UserCredential> registerWithEmailAndPassword({

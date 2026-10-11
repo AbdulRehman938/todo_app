@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'app_routes.dart';
 import '../../modules/auth/bindings/auth_binding.dart';
@@ -21,33 +22,48 @@ class AppPages {
     // Splash Screen
     GetPage(
       name: AppRoutes.splash,
-      page: () => const SplashView(),
+      page: () {
+        debugPrint('AppPages: Building SplashView');
+        return const SplashView();
+      },
       binding: SplashBinding(),
     ),
 
     // Authentication
     GetPage(
       name: AppRoutes.login,
-      page: () => const LoginView(),
+      page: () {
+        debugPrint('AppPages: Building LoginView');
+        return const LoginView();
+      },
       binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.signup,
-      page: () => const SignupView(),
+      page: () {
+        debugPrint('AppPages: Building SignupView');
+        return const SignupView();
+      },
       binding: AuthBinding(),
     ),
 
     // Main App
     GetPage(
       name: AppRoutes.home,
-      page: () => const HomeView(),
+      page: () {
+        debugPrint('AppPages: Building HomeView');
+        return const HomeView();
+      },
       binding: HomeBinding(),
     ),
 
     // Task Management
     GetPage(
       name: AppRoutes.addEditTask,
-      page: () => const AddEditTaskView(),
+      page: () {
+        debugPrint('AppPages: Building AddEditTaskView');
+        return const AddEditTaskView();
+      },
       binding: TaskBinding(),
     ),
     // GetPage(

@@ -11,10 +11,6 @@ class AuthController extends GetxController {
   final RxBool isObscurePassword = true.obs;
   final RxBool isObscureConfirmPassword = true.obs;
 
-  // Form keys
-  final loginFormKey = GlobalKey<FormState>();
-  final signupFormKey = GlobalKey<FormState>();
-
   // Text editing controllers
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -24,10 +20,12 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Check if user is already logged in
-    if (_authService.isLoggedIn) {
-      _navigateToHome();
-    }
+    // Check if user is already logged in after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_authService.isLoggedIn) {
+        _navigateToHome();
+      }
+    });
   }
 
   @override
@@ -49,8 +47,8 @@ class AuthController extends GetxController {
   }
 
   // Login
-  Future<void> login() async {
-    if (!loginFormKey.currentState!.validate()) {
+  Future<void> login(GlobalKey<FormState> formKey) async {
+    if (!formKey.currentState!.validate()) {
       return;
     }
 
@@ -93,8 +91,8 @@ class AuthController extends GetxController {
   }
 
   // Signup
-  Future<void> signup() async {
-    if (!signupFormKey.currentState!.validate()) {
+  Future<void> signup(GlobalKey<FormState> formKey) async {
+    if (!formKey.currentState!.validate()) {
       return;
     }
 

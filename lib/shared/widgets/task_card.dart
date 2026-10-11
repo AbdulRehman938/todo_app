@@ -42,7 +42,10 @@ class TaskCard extends StatelessWidget {
           ? (task.isCompleted ? AppColors.cardDark : AppColors.cardElevatedDark)
           : (task.isCompleted ? AppColors.card : AppColors.cardElevated),
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          print('TaskCard: Card tapped - ${task.title}');
+          onTap?.call();
+        },
         borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -77,6 +80,7 @@ class TaskCard extends StatelessWidget {
                     Checkbox(
                       value: task.isCompleted,
                       onChanged: (value) {
+                        print('TaskCard: Checkbox changed to: $value for ${task.title}');
                         if (value != null) {
                           onToggleComplete!(value);
                         }
@@ -197,7 +201,10 @@ class TaskCard extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        print('TaskCard: Action button pressed - ${icon.toString()} for ${task.title}');
+        onTap();
+      },
       borderRadius: BorderRadius.circular(8),
       child: Container(
         padding: const EdgeInsets.all(8),

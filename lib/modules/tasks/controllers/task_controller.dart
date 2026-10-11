@@ -105,9 +105,11 @@ class TaskController extends GetxController {
 
   // Add new task
   Future<void> addTask(TaskModel task) async {
+    print('TaskController: addTask called - ${task.title}');
     isLoading.value = true;
     try {
       await _taskService.addTask(task);
+      print('TaskController: Task added successfully');
       Get.snackbar(
         'Success',
         AppStrings.successTaskSaved,
@@ -116,6 +118,7 @@ class TaskController extends GetxController {
         colorText: Colors.white,
       );
     } catch (e) {
+      print('TaskController: Failed to add task - ${e.toString()}');
       Get.snackbar(
         'Error',
         AppStrings.errorSaveTask,

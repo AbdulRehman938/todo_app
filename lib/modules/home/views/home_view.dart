@@ -54,7 +54,10 @@ class HomeView extends GetView<TaskController> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: controller.goToAddTask,
+        onPressed: () {
+          print('HomeView: FAB pressed - navigating to add task');
+          controller.goToAddTask();
+        },
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -109,7 +112,10 @@ class HomeView extends GetView<TaskController> {
             ],
           ),
           IconButton(
-            onPressed: authController.logout,
+            onPressed: () {
+              print('HomeView: Logout button pressed');
+              authController.logout();
+            },
             icon: const Icon(Icons.logout_outlined),
             color: AppColors.error,
             tooltip: AppStrings.logout,
@@ -168,39 +174,37 @@ class HomeView extends GetView<TaskController> {
     IconData icon,
     bool isDarkMode,
   ) {
-    return Obx(
-      () => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isDarkMode ? AppColors.cardDark : AppColors.card,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: color.withValues(alpha: 0.2),
-            width: 1,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDarkMode ? AppColors.cardDark : AppColors.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: color.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            count.toString(),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: isDarkMode
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(height: 8),
-            Text(
-              count.toString(),
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: isDarkMode
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-            ),
-          ],
-        ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+          ),
+        ],
       ),
     );
   }
@@ -230,30 +234,28 @@ class HomeView extends GetView<TaskController> {
   }
 
   Widget _buildFilterChips(BuildContext context, bool isDarkMode) {
-    return Obx(
-      () => Wrap(
-        spacing: 8,
-        children: [
-          _buildFilterChip(
-            context,
-            AppStrings.allTasks,
-            TaskFilter.all,
-            isDarkMode,
-          ),
-          _buildFilterChip(
-            context,
-            AppStrings.pendingTasks,
-            TaskFilter.pending,
-            isDarkMode,
-          ),
-          _buildFilterChip(
-            context,
-            AppStrings.completedTasks,
-            TaskFilter.completed,
-            isDarkMode,
-          ),
-        ],
-      ),
+    return Wrap(
+      spacing: 8,
+      children: [
+        _buildFilterChip(
+          context,
+          AppStrings.allTasks,
+          TaskFilter.all,
+          isDarkMode,
+        ),
+        _buildFilterChip(
+          context,
+          AppStrings.pendingTasks,
+          TaskFilter.pending,
+          isDarkMode,
+        ),
+        _buildFilterChip(
+          context,
+          AppStrings.completedTasks,
+          TaskFilter.completed,
+          isDarkMode,
+        ),
+      ],
     );
   }
 
@@ -267,7 +269,10 @@ class HomeView extends GetView<TaskController> {
       () => FilterChip(
         label: Text(label),
         selected: controller.currentFilter.value == filter,
-        onSelected: (_) => controller.setFilter(filter),
+        onSelected: (_) {
+          print('HomeView: Filter changed to: $filter');
+          controller.setFilter(filter);
+        },
         selectedColor: AppColors.primary,
         checkmarkColor: Colors.white,
         labelStyle: TextStyle(
@@ -288,37 +293,35 @@ class HomeView extends GetView<TaskController> {
   }
 
   Widget _buildSortOptions(BuildContext context, bool isDarkMode) {
-    return Obx(
-      () => Row(
-        children: [
-          Icon(
-            Icons.sort_outlined,
-            size: 20,
-            color: AppColors.textSecondary,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            'Sort by:',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-          ),
-          const SizedBox(width: 8),
-          _buildSortOption(
-            context,
-            'Due Date',
-            TaskSort.dueDate,
-            isDarkMode,
-          ),
-          const SizedBox(width: 8),
-          _buildSortOption(
-            context,
-            'Priority',
-            TaskSort.priority,
-            isDarkMode,
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        Icon(
+          Icons.sort_outlined,
+          size: 20,
+          color: AppColors.textSecondary,
+        ),
+        const SizedBox(width: 8),
+        Text(
+          'Sort by:',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.textSecondary,
+              ),
+        ),
+        const SizedBox(width: 8),
+        _buildSortOption(
+          context,
+          'Due Date',
+          TaskSort.dueDate,
+          isDarkMode,
+        ),
+        const SizedBox(width: 8),
+        _buildSortOption(
+          context,
+          'Priority',
+          TaskSort.priority,
+          isDarkMode,
+        ),
+      ],
     );
   }
 
@@ -330,7 +333,10 @@ class HomeView extends GetView<TaskController> {
   ) {
     return Obx(
       () => InkWell(
-        onTap: () => controller.setSort(sort),
+        onTap: () {
+          print('HomeView: Sort changed to: $sort');
+          controller.setSort(sort);
+        },
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

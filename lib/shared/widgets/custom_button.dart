@@ -37,6 +37,12 @@ class CustomButton extends StatelessWidget {
     final isEnabled = onPressed != null && !isLoading && !isDisabled;
 
     Widget buttonChild;
+    VoidCallback? handlePress = isEnabled
+        ? () {
+            print('CustomButton: Button pressed - $text');
+            onPressed?.call();
+          }
+        : null;
     if (isLoading) {
       buttonChild = SizedBox(
         width: 24,
@@ -63,22 +69,22 @@ class CustomButton extends StatelessWidget {
 
     final button = switch (buttonType) {
       ButtonType.primary => ElevatedButton(
-          onPressed: isEnabled ? onPressed : null,
+          onPressed: handlePress,
           style: _getPrimaryStyle(context),
           child: buttonChild,
         ),
       ButtonType.secondary => ElevatedButton(
-          onPressed: isEnabled ? onPressed : null,
+          onPressed: handlePress,
           style: _getSecondaryStyle(context),
           child: buttonChild,
         ),
       ButtonType.outlined => OutlinedButton(
-          onPressed: isEnabled ? onPressed : null,
+          onPressed: handlePress,
           style: _getOutlinedStyle(context),
           child: buttonChild,
         ),
       ButtonType.text => TextButton(
-          onPressed: isEnabled ? onPressed : null,
+          onPressed: handlePress,
           style: _getTextButtonStyle(context),
           child: buttonChild,
         ),

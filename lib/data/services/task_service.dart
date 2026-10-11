@@ -110,14 +110,20 @@ class TaskService extends GetxService {
   // Add new task
   Future<String> addTask(TaskModel task) async {
     try {
+      final authService = Get.find<AuthService>();
+      final userId = authService.currentUserId;
+
       final taskData = task.toMap();
       taskData.remove('id'); // Remove id as Firestore will generate it
+      taskData['userId'] = userId; // Set the userId
       taskData['createdAt'] = FieldValue.serverTimestamp();
       taskData['updatedAt'] = FieldValue.serverTimestamp();
 
       final docRef = await _tasksCollection.add(taskData);
+      print('TaskService: Task added with ID: ${docRef.id}');
       return docRef.id;
     } catch (e) {
+      print('TaskService: Failed to add task - ${e.toString()}');
       throw Exception('Failed to add task: ${e.toString()}');
     }
   }

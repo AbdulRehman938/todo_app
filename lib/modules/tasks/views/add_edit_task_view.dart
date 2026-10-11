@@ -36,7 +36,9 @@ class AddEditTaskView extends GetView<TaskController> {
     final isLoading = false.obs;
 
     Future<void> saveTask() async {
+      print('AddEditTaskView: saveTask called - isEdit: $isEdit');
       if (!formKey.currentState!.validate()) {
+        print('AddEditTaskView: Form validation failed');
         return;
       }
 
@@ -64,14 +66,20 @@ class AddEditTaskView extends GetView<TaskController> {
           updatedAt: now,
         );
 
+        print('AddEditTaskView: Task model created - ${taskModel.title}');
+
         if (isEdit && task != null) {
+          print('AddEditTaskView: Updating task');
           await controller.updateTask(taskModel);
         } else {
+          print('AddEditTaskView: Adding new task');
           await controller.addTask(taskModel);
         }
 
+        print('AddEditTaskView: Navigating back');
         Get.back();
       } catch (e) {
+        print('AddEditTaskView: Error saving task - ${e.toString()}');
         // Error handled in controller
       } finally {
         isLoading.value = false;
@@ -83,7 +91,10 @@ class AddEditTaskView extends GetView<TaskController> {
         title: Text(isEdit ? AppStrings.editTask : AppStrings.addTask),
         actions: [
           TextButton(
-            onPressed: () => Get.back(),
+            onPressed: () {
+              print('AddEditTaskView: Cancel button pressed');
+              Get.back();
+            },
             child: Text(
               AppStrings.cancel,
               style: TextStyle(
@@ -139,6 +150,7 @@ class AddEditTaskView extends GetView<TaskController> {
                 Obx(
                   () => InkWell(
                     onTap: () async {
+                      print('AddEditTaskView: Date picker tapped');
                       final picked = await showDatePicker(
                         context: context,
                         initialDate: selectedDate.value,
@@ -146,7 +158,10 @@ class AddEditTaskView extends GetView<TaskController> {
                         lastDate: DateTime.now().add(const Duration(days: 365)),
                       );
                       if (picked != null) {
+                        print('AddEditTaskView: Date selected: $picked');
                         selectedDate.value = picked;
+                      } else {
+                        print('AddEditTaskView: Date picker cancelled');
                       }
                     },
                     borderRadius: BorderRadius.circular(12),
@@ -201,12 +216,16 @@ class AddEditTaskView extends GetView<TaskController> {
                 Obx(
                   () => InkWell(
                     onTap: () async {
+                      print('AddEditTaskView: Time picker tapped');
                       final picked = await showTimePicker(
                         context: context,
                         initialTime: selectedTime.value,
                       );
                       if (picked != null) {
+                        print('AddEditTaskView: Time selected: $picked');
                         selectedTime.value = picked;
+                      } else {
+                        print('AddEditTaskView: Time picker cancelled');
                       }
                     },
                     borderRadius: BorderRadius.circular(12),
@@ -297,6 +316,7 @@ class AddEditTaskView extends GetView<TaskController> {
                           );
                         }).toList(),
                         onChanged: (value) {
+                          print('AddEditTaskView: Priority changed to: $value');
                           if (value != null) {
                             selectedPriority.value = value;
                           }

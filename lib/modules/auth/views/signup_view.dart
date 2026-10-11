@@ -8,6 +8,7 @@ import '../controllers/auth_controller.dart';
 
 class SignupView extends GetView<AuthController> {
   const SignupView({super.key});
+  static final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +97,7 @@ class SignupView extends GetView<AuthController> {
 
                 // Signup Form
                 Form(
-                  key: controller.signupFormKey,
+                  key: _formKey,
                   child: Column(
                     children: [
                       // Name Field
@@ -123,31 +124,27 @@ class SignupView extends GetView<AuthController> {
                       const SizedBox(height: 16),
 
                       // Password Field
-                      Obx(
-                        () => CustomTextField(
-                          label: AppStrings.passwordLabel,
-                          hint: AppStrings.passwordHint,
-                          controller: controller.passwordController,
-                          prefixIcon: Icons.lock_outline,
-                          isPassword: true,
-                          validator: controller.validatePassword,
-                          textInputAction: TextInputAction.next,
-                        ),
+                      CustomTextField(
+                        label: AppStrings.passwordLabel,
+                        hint: AppStrings.passwordHint,
+                        controller: controller.passwordController,
+                        prefixIcon: Icons.lock_outline,
+                        isPassword: true,
+                        validator: controller.validatePassword,
+                        textInputAction: TextInputAction.next,
                       ),
                       const SizedBox(height: 16),
 
                       // Confirm Password Field
-                      Obx(
-                        () => CustomTextField(
-                          label: AppStrings.confirmPasswordLabel,
-                          hint: AppStrings.confirmPasswordHint,
-                          controller: controller.confirmPasswordController,
-                          prefixIcon: Icons.lock_outline,
-                          isPassword: true,
-                          validator: controller.validateConfirmPassword,
-                          textInputAction: TextInputAction.done,
-                          onEditingComplete: () => controller.signup(),
-                        ),
+                      CustomTextField(
+                        label: AppStrings.confirmPasswordLabel,
+                        hint: AppStrings.confirmPasswordHint,
+                        controller: controller.confirmPasswordController,
+                        prefixIcon: Icons.lock_outline,
+                        isPassword: true,
+                        validator: controller.validateConfirmPassword,
+                        textInputAction: TextInputAction.done,
+                        onEditingComplete: () => controller.signup(_formKey),
                       ),
                       const SizedBox(height: 24),
 
@@ -155,7 +152,7 @@ class SignupView extends GetView<AuthController> {
                       Obx(
                         () => CustomButton(
                           text: AppStrings.signUpButton,
-                          onPressed: controller.signup,
+                          onPressed: () => controller.signup(_formKey),
                           isLoading: controller.isLoading.value,
                           isFullWidth: true,
                         ),
@@ -207,16 +204,16 @@ class SignupView extends GetView<AuthController> {
                                 ),
                           ),
                           TextButton(
-                            onPressed: controller.goToLogin,
+                            onPressed: () {
+                              print('SignupView: Login button pressed - navigating to login');
+                              Get.toNamed(AppRoutes.login);
+                            },
                             child: Text(
-                              AppStrings.loginLink,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              AppStrings.login,
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ],
