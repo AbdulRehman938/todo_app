@@ -8,6 +8,7 @@ import '../controllers/auth_controller.dart';
 
 class LoginView extends GetView<AuthController> {
   const LoginView({super.key});
+  static final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +97,7 @@ class LoginView extends GetView<AuthController> {
 
                 // Login Form
                 Form(
-                  key: controller.loginFormKey,
+                  key: _formKey,
                   child: Column(
                     children: [
                       // Email Field
@@ -112,17 +113,15 @@ class LoginView extends GetView<AuthController> {
                       const SizedBox(height: 16),
 
                       // Password Field
-                      Obx(
-                        () => CustomTextField(
-                          label: AppStrings.passwordLabel,
-                          hint: AppStrings.passwordHint,
-                          controller: controller.passwordController,
-                          prefixIcon: Icons.lock_outline,
-                          isPassword: true,
-                          validator: controller.validatePassword,
-                          textInputAction: TextInputAction.done,
-                          onEditingComplete: () => controller.login(),
-                        ),
+                      CustomTextField(
+                        label: AppStrings.passwordLabel,
+                        hint: AppStrings.passwordHint,
+                        controller: controller.passwordController,
+                        prefixIcon: Icons.lock_outline,
+                        isPassword: true,
+                        validator: controller.validatePassword,
+                        textInputAction: TextInputAction.done,
+                        onEditingComplete: () => controller.login(_formKey),
                       ),
                       const SizedBox(height: 8),
 
@@ -151,7 +150,7 @@ class LoginView extends GetView<AuthController> {
                       Obx(
                         () => CustomButton(
                           text: AppStrings.loginButton,
-                          onPressed: controller.login,
+                          onPressed: () => controller.login(_formKey),
                           isLoading: controller.isLoading.value,
                           isFullWidth: true,
                         ),
@@ -203,16 +202,16 @@ class LoginView extends GetView<AuthController> {
                                 ),
                           ),
                           TextButton(
-                            onPressed: controller.goToSignup,
+                            onPressed: () {
+                              print('LoginView: Sign Up button pressed - navigating to signup');
+                              Get.toNamed(AppRoutes.signup);
+                            },
                             child: Text(
-                              AppStrings.signUpLink,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              AppStrings.signUp,
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ],

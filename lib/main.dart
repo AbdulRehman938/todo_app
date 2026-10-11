@@ -8,17 +8,20 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  debugPrint('Main: Initializing Firebase...');
   
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    debugPrint('Main: Firebase initialized successfully');
   } catch (e) {
     // Log Firebase initialization error but continue
     // This allows the app to run even if Firebase fails on web
-    debugPrint('Firebase initialization error: $e');
+    debugPrint('Main: Firebase initialization error: $e');
   }
   
+  debugPrint('Main: Starting MyApp');
   runApp(const MyApp());
 }
 

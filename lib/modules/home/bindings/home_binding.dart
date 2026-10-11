@@ -9,7 +9,7 @@ class HomeBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<AuthService>(() => AuthService(), fenix: true);
     Get.lazyPut<TaskService>(() => TaskService(), fenix: true);
-    Get.lazyPut<AuthController>(() => AuthController());
+    // Don't create AuthController here - it should already exist from AuthBinding
     Get.lazyPut<TaskController>(() => TaskController());
   }
 }
